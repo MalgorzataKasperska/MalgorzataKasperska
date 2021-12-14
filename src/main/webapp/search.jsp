@@ -1,22 +1,23 @@
-<%@ page import = "java.io.*,java.util.*,java.sql.*"%>
-<%@ page import = "javax.servlet.http.*,javax.servlet.*" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix = "c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix = "sql"%>
 <%@ page language="java" contentType="text/html;charset=ISO-8859-1" pageEncoding="ISO-8859-1"  %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.example.sucette.Search" %>
 
 <html>
 <head>
     <title>Products</title>
 </head>
 <body>
-<sql:setDataSource var = "product" driver = "com.mysql.jdbc.Driver"
-                   url = "jdbc:mysql://localhost:3306/sucette"
-                   user = "root"  password = "toor"/>
+<p>Products</p>
+<%
+    List<Search> products = (List<Search>) request.getAttribute("products");
+%>
+<form action="${pageContext.request.contextPath}/search" method="POST">
+    Search:
+    <input type="text" id="fname" name="fname" placeholder="Type what are you looking for" />
+    <input type="submit" value="search" />
+</form>
 
-<%--@elvariable id="SearchController" type="java"--%>
-<sql:query dataSource = "${SearchController}" var = "products">
-    SELECT * from products;
-</sql:query>
 <table border = "1" width = "100%">
     <tr>
         <th>Product ID</th>
@@ -25,7 +26,7 @@
         <th>Description</th>
     </tr>
 
-    <c:forEach var = "product" items = "${products.products}">
+       <c:forEach items="${products}" var="product">
         <tr>
             <td><c:out value = "${product.productNo}"/></td>
             <td><c:out value = "${product.productName}"/></td>
@@ -34,5 +35,6 @@
         </tr>
     </c:forEach>
 </table>
+
 </body>
 </html>
